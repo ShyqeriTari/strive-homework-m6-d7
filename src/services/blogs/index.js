@@ -21,8 +21,8 @@ blogsRouter.get("/", async (req, res, next) => {
     const mongoQuery = q2m(req.query)
     const total = await blogsModel.countDocuments(mongoQuery.criteria)
     const blogs = await blogsModel.find(mongoQuery.criteria, mongoQuery.options.fields)
-      .limit(mongoQuery.options.limit || 10)
       .skip(mongoQuery.options.skip || 0)
+      .limit(mongoQuery.options.limit || 10)
       .sort(mongoQuery.options.sort) 
     res.send({
       links: mongoQuery.links(`${process.env.API_URL}/blogs`, total),

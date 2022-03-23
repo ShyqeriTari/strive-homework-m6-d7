@@ -1,6 +1,7 @@
 import express from "express"
 import createError from "http-errors"
 import blogsModel from "./model.js"
+import q2m from "query-to-mongo"
 
 const blogsRouter = express.Router()
 
@@ -17,8 +18,18 @@ blogsRouter.post("/", async (req, res, next) => {
 
 blogsRouter.get("/", async (req, res, next) => {
   try {
-    const blogs = await blogsModel.find()
-    res.send(blogs)
+    const mongoQuery = q2m(req.query)
+    const total = await blogsModel.countDocuments(mongoQuery.criteria)
+    const blogs = await blogsModel.find(mongoQuery.criteria, mongoQuery.options.fields)
+      .limit(mongoQuery.options.limit || 10)
+      .skip(mongoQuery.options.skip || 0)
+      .sort(mongoQuery.options.sort) // no matter in which order you call this methods, Mongo will ALWAYS do SORT, SKIP, LIMIT in this order
+    res.send({
+      links: mongoQuery.links(`${process.env.API_URL}/blogs`, total),
+      total,
+      totalPages: Math.ceil(total / mongoQuery.options.limit),
+      blogs,
+    })
   } catch (error) {
     next(error)
   }

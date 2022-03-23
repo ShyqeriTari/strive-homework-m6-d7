@@ -3,15 +3,17 @@ import mongoose from "mongoose"
 import listEndpoints from "express-list-endpoints"
 import cors from "cors"
 import blogsRouter from "./services/blogs/index.js"
+import commentsRouter from "./services/blogs/comments/index.js"
 import { badRequestHandler, notFoundHandler, genericErrorHandler } from "./errorHandlers.js"
 
 const server = express()
-const port = process.env.PORT 
+const port = process.env.PORT
 
 server.use(cors())
 server.use(express.json())
 
-server.use("/blogs", blogsRouter)
+server.use("/blogs", [blogsRouter, commentsRouter])
+
 
 server.use(badRequestHandler)
 server.use(notFoundHandler)

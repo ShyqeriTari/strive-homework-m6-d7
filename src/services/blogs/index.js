@@ -78,76 +78,76 @@ blogsRouter.delete("/:id", async (req, res, next) => {
   }
 })
 
-blogsRouter.post("/:id", async (req, res, next) => {
-  try {
-    const commentedBlog = await blogsModel.findByIdAndUpdate(
-      req.params.id,
-      { $push: { comments: req.body } }, 
-      { new: true, runValidators: true } 
-    )
-    res.status(201).send({ commentedBlog })
-  } catch (error) {
-    next(error)
-  }
-})
+// blogsRouter.post("/:id", async (req, res, next) => {
+//   try {
+//     const commentedBlog = await blogsModel.findByIdAndUpdate(
+//       req.params.id,
+//       { $push: { comments: req.body } }, 
+//       { new: true, runValidators: true } 
+//     )
+//     res.status(201).send({ commentedBlog })
+//   } catch (error) {
+//     next(error)
+//   }
+// })
 
-blogsRouter.get("/:id/comments", async (req, res, next) => {
-  try {
-    const blogs = await blogsModel.findById(req.params.id)
-    res.send(blogs.comments)
-  } catch (error) {
-    next(error)
-  }
-})
+// blogsRouter.get("/:id/comments", async (req, res, next) => {
+//   try {
+//     const blogs = await blogsModel.findById(req.params.id)
+//     res.send(blogs.comments)
+//   } catch (error) {
+//     next(error)
+//   }
+// })
 
-blogsRouter.get("/:id/comments/:commentId", async (req, res, next) => {
-  try {
-    const blog = await blogsModel.findById(req.params.id)
-    const comment = blog.comments.find(comment => comment._id.toString() === req.params.commentId)
-    if (comment) {
-      res.send(comment)
-    } else {
-      next(createError(404, `Blog with id ${req.params.id} not found!`))
-    }
-  } catch (error) {
-    next(error)
-  }
-})
+// blogsRouter.get("/:id/comments/:commentId", async (req, res, next) => {
+//   try {
+//     const blog = await blogsModel.findById(req.params.id)
+//     const comment = blog.comments.find(comment => comment._id.toString() === req.params.commentId)
+//     if (comment) {
+//       res.send(comment)
+//     } else {
+//       next(createError(404, `Blog with id ${req.params.id} not found!`))
+//     }
+//   } catch (error) {
+//     next(error)
+//   }
+// })
 
-blogsRouter.put("/:id/comment/:commentId", async (req, res, next) => {
-  try {
-    const blog = await blogsModel.findById(req.params.id)
+// blogsRouter.put("/:id/comment/:commentId", async (req, res, next) => {
+//   try {
+//     const blog = await blogsModel.findById(req.params.id)
    
-    const index = blog.comments.findIndex(comment => comment._id.toString() === req.params.commentId)
+//     const index = blog.comments.findIndex(comment => comment._id.toString() === req.params.commentId)
 
-    if (index !== -1) {
-      blog.comments[index] = { ...blog.comments[index].toObject(), ...req.body }
-      await blog.save()
-      res.send(blog.comments[index])
-    } else {
-      next(createError(404, `Blog with id ${req.params.id} not found!`))
-    }
-  } catch (error) {
-    next(error)
-  }
-})
+//     if (index !== -1) {
+//       blog.comments[index] = { ...blog.comments[index].toObject(), ...req.body }
+//       await blog.save()
+//       res.send(blog.comments[index])
+//     } else {
+//       next(createError(404, `Blog with id ${req.params.id} not found!`))
+//     }
+//   } catch (error) {
+//     next(error)
+//   }
+// })
 
-blogsRouter.delete("/:id/comment/:commentId", async (req, res, next) => {
-  try {
-    const modifiedBlog = await blogsModel.findByIdAndUpdate(
-      req.params.id, // WHO
-      { $pull: { comments: { _id: req.params.commentId } } }, // HOW
-      { new: true }
-    )
-    if (modifiedBlog) {
-      res.send(modifiedBlog)
-    } else {
-      next(createError(404, `Blog with id ${req.params.id} not found!`))
-    }
-  } catch (error) {
-    next(error)
-  }
-})
+// blogsRouter.delete("/:id/comment/:commentId", async (req, res, next) => {
+//   try {
+//     const modifiedBlog = await blogsModel.findByIdAndUpdate(
+//       req.params.id, // WHO
+//       { $pull: { comments: { _id: req.params.commentId } } }, // HOW
+//       { new: true }
+//     )
+//     if (modifiedBlog) {
+//       res.send(modifiedBlog)
+//     } else {
+//       next(createError(404, `Blog with id ${req.params.id} not found!`))
+//     }
+//   } catch (error) {
+//     next(error)
+//   }
+// })
 
 
 

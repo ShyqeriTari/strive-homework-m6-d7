@@ -33,7 +33,10 @@ blogsRouter.get("/", async (req, res, next) => {
 
 blogsRouter.get("/:id", async (req, res, next) => {
   try {
-    const blog = await blogsModel.findById(req.params.id).populate({ path: "author", select: "name avatar" })
+      
+
+      const blog = await blogsModel.findById(req.params.id).populate({ path: "author", select: "name avatar" }).populate({ path: "comments", populate: { path: "author", select: "name avatar" }}).populate({ path: "likes", select: "name" })
+
     if (blog) {
       res.send(blog)
     } else {

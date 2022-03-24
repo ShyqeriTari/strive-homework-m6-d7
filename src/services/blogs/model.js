@@ -32,6 +32,8 @@ blogSchema.static("blogWithAuthor", async function (mongoQuery) {
       .skip(mongoQuery.options.skip || 0)
       .sort(mongoQuery.options.sort)
       .populate({ path: "author", select: "name avatar" })
+      .populate({ path: "comments", populate: { path: "author", select: "name avatar" }})
+      .populate({ path: "likes", select: "name" })
   
     return { total, blogs }
   })

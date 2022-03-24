@@ -22,7 +22,7 @@ commentsRouter.post("/:id", async (req, res, next) => {
 
 commentsRouter.get("/:id/comments", async (req, res, next) => {
     try {
-        const blogs = await blogsModel.findById(req.params.id)
+        const blogs = await blogsModel.findById(req.params.id).populate({ path: "comments", populate: { path: "author", select: "name avatar" }})
         res.send(blogs.comments)
     } catch (error) {
         next(error)
@@ -31,7 +31,7 @@ commentsRouter.get("/:id/comments", async (req, res, next) => {
 
 commentsRouter.get("/:id/comments/:commentId", async (req, res, next) => {
     try {
-        const blog = await blogsModel.findById(req.params.id)
+        const blog = await blogsModel.findById(req.params.id).populate({ path: "comments", populate: { path: "author", select: "name avatar" }})
         const comment = blog.comments.find(comment => comment._id.toString() === req.params.commentId)
         if (comment) {
             res.send(comment)

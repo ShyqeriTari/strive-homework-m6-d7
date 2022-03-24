@@ -6,6 +6,7 @@ import blogsRouter from "./services/blogs/index.js"
 import commentsRouter from "./services/blogs/comments/index.js"
 import { badRequestHandler, notFoundHandler, genericErrorHandler } from "./errorHandlers.js"
 import authorsRouter from "./services/authors/index.js"
+import likesRouter from "./services/blogs/likes/index.js"
 
 const server = express()
 const port = process.env.PORT
@@ -13,7 +14,7 @@ const port = process.env.PORT
 server.use(cors())
 server.use(express.json())
 
-server.use("/blogs", [blogsRouter, commentsRouter])
+server.use("/blogs", [blogsRouter, commentsRouter, likesRouter])
 server.use("/authors", authorsRouter)
 
 

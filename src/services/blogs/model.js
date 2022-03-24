@@ -11,10 +11,7 @@ const blogSchema = new Schema(
             value: { type: Number, required: true },
             unit: {type: String, required: true }
                 },
-        author: {
-            name: { type: String, required: true },
-            avatar: {type: String, required: true }
-                },
+        author: { type: Schema.Types.ObjectId, ref: "author" },
         content:{ type: String, required: true },
         comments:[{
             text: {type: String}
@@ -24,5 +21,17 @@ const blogSchema = new Schema(
         timestamps: true,
     }
 )
+
+blogSchema.static("blogWithAuthor", async function (mongoQuery) {
+
+    const total = await this.countDocuments(mongoQuery.criteria)
+    const blogs = await this.find(mongoQuery.criteria, mongoQuery.options.fields)
+      .limit(mongoQuery.options.limit || 10)
+      .skip(mongoQuery.options.skip || 0)
+      .sort(mongoQuery.options.sort)
+      .populate({ path: "author", select: "name avatar" })
+  
+    return { total, blogs }
+  })
 
 export default model("blog", blogSchema)

@@ -4,9 +4,10 @@ import listEndpoints from "express-list-endpoints"
 import cors from "cors"
 import blogsRouter from "./services/blogs/index.js"
 import commentsRouter from "./services/blogs/comments/index.js"
-import { badRequestHandler, notFoundHandler, genericErrorHandler } from "./errorHandlers.js"
+import { badRequestHandler, unauthorizedHandler, forbiddenHandler, notFoundHandler, genericErrorHandler } from "./errorHandlers.js"
 import authorsRouter from "./services/authors/index.js"
 import likesRouter from "./services/blogs/likes/index.js"
+import usersRouter from "./services/users/index.js"
 
 const server = express()
 const port = process.env.PORT
@@ -16,10 +17,13 @@ server.use(express.json())
 
 server.use("/blogs", [blogsRouter, commentsRouter, likesRouter])
 server.use("/authors", authorsRouter)
+server.use("/users", usersRouter)
 
 
 
 server.use(badRequestHandler)
+server.use(unauthorizedHandler)
+server.use(forbiddenHandler)
 server.use(notFoundHandler)
 server.use(genericErrorHandler)
 

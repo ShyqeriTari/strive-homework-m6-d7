@@ -7,7 +7,7 @@ import { adminOnlyMiddleware } from "../../auth/adminOnlyMiddleware.js"
 
 const usersRouter = express.Router()
 
-usersRouter.post("/", async (req, res, next) => {
+usersRouter.post("/register", async (req, res, next) => {
   try {
     const newUser = new UsersModel(req.body)
     const { _id } = await newUser.save()
